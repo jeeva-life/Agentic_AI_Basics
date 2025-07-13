@@ -7,3 +7,4 @@ langchain-groq
 langchain-openai
 anthropic
 langchain_tavily
+langchain-community
