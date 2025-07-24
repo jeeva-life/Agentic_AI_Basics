@@ -1,1 +1,5 @@
 bfg-1.14.0.jar
+ BlogGeneration/.python-version
+BlogGeneration/__pycache__/
+BlogGeneration/uv.lock
+Linkedin_posts/.env.example
