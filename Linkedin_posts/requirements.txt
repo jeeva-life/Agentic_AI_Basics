@@ -1,0 +1,32 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# Environment Management
+python-dotenv
+
+# LangChain and AI
+langchain
+langchain-openai
+langchain-community
+langgraph
+openai
+
+# YouTube Processing
+youtube-transcript-api
+
+# Web Search and Tools
+duckduckgo-search
+requests
+
+# Development and Testing
+pytest
+pytest-asyncio
+httpx
+black
+flake8
+
+# Production
+gunicorn
