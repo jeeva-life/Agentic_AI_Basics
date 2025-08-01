@@ -7,9 +7,9 @@ class Settings(BaseSettings):
     
     # OpenAI Configuration
     OPENAI_API_KEY: str = ""
-    OPENAI_MODEL: str = "gpt-3.5-turbo"
+    OPENAI_MODEL: str = "gpt-4"  # Use GPT-4 for better handling of long content
     DEFAULT_TEMPERATURE: float = 0.7
-    DEFAULT_MAX_TOKENS: int = 2000
+    DEFAULT_MAX_TOKENS: int = 8000  # Increased for longer content generation
     
     # Application Configuration
     APP_NAME: str = "YouTube Multi-Agent Content Workflow"
@@ -21,10 +21,10 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     
-    # Content Processing Limits
-    MAX_TRANSCRIPT_LENGTH: int = 10000
-    MAX_CONTENT_LENGTH: int = 5000
-    MAX_TITLE_LENGTH: int = 100
+    # Content Processing Limits - Increased for 20+ minute videos
+    MAX_TRANSCRIPT_LENGTH: int = 50000  # Handle full 20+ minute videos
+    MAX_CONTENT_LENGTH: int = 25000  # Allow longer content generation
+    MAX_TITLE_LENGTH: int = 200
     
     # Platform-specific Settings
     LINKEDIN_CHAR_LIMIT: int = 3000

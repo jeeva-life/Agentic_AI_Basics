@@ -89,8 +89,8 @@ class ContentAgent(BaseAgent):
         
         # For 20+ minute videos, we need to handle larger transcripts
         # Most LLMs can handle 15-20k tokens, so we can use much more content
-        # Increase to handle the full 13,970 character transcript we confirmed
-        max_transcript = min(transcript_length, 20000)  # Handle full 20+ minute videos
+        # Increase to handle the full 20+ minute video transcripts
+        max_transcript = min(transcript_length, 50000)  # Handle full 20+ minute videos
         
         logger.info(f"Generating comprehensive content from {max_transcript}/{transcript_length} characters of transcript")
         logger.info(f"Transcript preview (first 200 chars): {transcript[:200]}...")
@@ -106,7 +106,9 @@ class ContentAgent(BaseAgent):
             "output_format": output_format
         })
         
-        return content.strip()
+        # Clean the content to remove unwanted escape characters
+        cleaned_content = self._clean_content_output(content.strip())
+        return cleaned_content
     
     async def _analyze_transcript_structure(self, transcript: str) -> str:
         """Expert analysis of transcript structure to identify AI/Agents technical topics and sections"""
@@ -166,6 +168,43 @@ class ContentAgent(BaseAgent):
         except Exception as e:
             logger.warning(f"Transcript analysis failed: {e}")
             return "Comprehensive AI/Agents technical content analysis required"
+    
+    def _clean_content_output(self, content: str) -> str:
+        """Clean content output to remove unwanted escape characters and formatting issues"""
+        if not content:
+            return content
+        
+        import re
+        
+        # Remove unwanted escape characters more thoroughly
+        cleaned = content
+        
+        # Handle escaped quotes
+        cleaned = cleaned.replace('\\"', '"')
+        cleaned = cleaned.replace('\\"', '"')  # Double check
+        
+        # Handle escaped newlines and convert to actual newlines
+        cleaned = cleaned.replace('\\n', '\n')
+        cleaned = cleaned.replace('\\n\\n', '\n\n')  # Handle double newlines
+        
+        # Handle escaped tabs
+        cleaned = cleaned.replace('\\t', '\t')
+        
+        # Remove extra backslashes
+        cleaned = cleaned.replace('\\\\', '\\')
+        
+        # Clean up any double quotes at the beginning/end
+        cleaned = cleaned.strip()
+        if cleaned.startswith('"') and cleaned.endswith('"'):
+            cleaned = cleaned[1:-1]
+        
+        # Remove any remaining escape sequences except for \n and \t
+        cleaned = re.sub(r'\\([^nt"])', r'\1', cleaned)
+        
+        # Final cleanup of any remaining backslashes
+        cleaned = re.sub(r'\\(?!n|t)', '', cleaned)
+        
+        return cleaned.strip()
     
     async def _enhance_content(self, content: str, platform: str, structure_analysis: str) -> str:
         """Enhance content based on structure analysis"""

@@ -185,9 +185,13 @@ class TitleAgent(BaseAgent):
         lines = title_result.split('\n')
         for line in lines:
             if line.strip() and not line.startswith(('1.', '2.', '3.', '•', '-')):
-                return line.strip()
+                # Clean the title to remove unwanted escape characters
+                cleaned_title = self._clean_title_output(line.strip())
+                return cleaned_title
         
-        return lines[0].strip() if lines else "Engaging Content from Video"
+        # Fallback to first line if no good title found
+        fallback_title = lines[0].strip() if lines else "Engaging Content from Video"
+        return self._clean_title_output(fallback_title)
     
     async def _optimize_title_for_platform(self, title: str, platform: str) -> str:
         """Platform-specific title optimization"""
@@ -211,3 +215,40 @@ class TitleAgent(BaseAgent):
         except Exception as e:
             logger.warning(f"Title optimization failed: {e}")
             return title
+    
+    def _clean_title_output(self, title: str) -> str:
+        """Clean title output to remove unwanted escape characters and formatting issues"""
+        if not title:
+            return title
+        
+        import re
+        
+        # Remove unwanted escape characters more thoroughly
+        cleaned = title
+        
+        # Handle escaped quotes
+        cleaned = cleaned.replace('\\"', '"')
+        cleaned = cleaned.replace('\\"', '"')  # Double check
+        
+        # Handle escaped newlines and convert to spaces
+        cleaned = cleaned.replace('\\n', ' ')
+        cleaned = cleaned.replace('\\n\\n', ' ')  # Handle double newlines
+        
+        # Handle escaped tabs
+        cleaned = cleaned.replace('\\t', ' ')
+        
+        # Remove extra backslashes
+        cleaned = cleaned.replace('\\\\', '\\')
+        
+        # Clean up any double quotes at the beginning/end
+        cleaned = cleaned.strip()
+        if cleaned.startswith('"') and cleaned.endswith('"'):
+            cleaned = cleaned[1:-1]
+        
+        # Remove any remaining escape sequences
+        cleaned = re.sub(r'\\([^nt"])', r'\1', cleaned)
+        
+        # Final cleanup of any remaining backslashes
+        cleaned = re.sub(r'\\(?!n|t)', '', cleaned)
+        
+        return cleaned.strip()

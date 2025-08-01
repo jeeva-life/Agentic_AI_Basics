@@ -44,17 +44,38 @@ class YouTubeTranscriptTool(BaseTool):
             
             # Combine transcript parts - handle both dict and object formats
             full_transcript = ""
+            part_count = 0
+            total_duration = 0
+            
             for part in transcript_list:
+                part_count += 1
                 # Handle both dictionary and object formats
                 if hasattr(part, 'text'):
                     # Object format (FetchedTranscriptSnippet)
                     full_transcript += part.text + " "
+                    if hasattr(part, 'duration'):
+                        total_duration += part.duration
                 elif isinstance(part, dict) and 'text' in part:
                     # Dictionary format
                     full_transcript += part['text'] + " "
+                    if 'duration' in part:
+                        total_duration += part['duration']
                 else:
                     # Try to convert to string
                     full_transcript += str(part) + " "
+            
+            # Log detailed extraction info for debugging
+            logger.info(f"Extracted {part_count} transcript parts")
+            logger.info(f"Total transcript duration: {total_duration:.2f} seconds ({total_duration/60:.2f} minutes)")
+            logger.info(f"Raw transcript length: {len(full_transcript)} characters")
+            logger.info(f"Raw transcript word count: {len(full_transcript.split())}")
+            
+            # Check for potential issues
+            if total_duration > 0:
+                expected_min_words = (total_duration / 60) * 120  # 120 words per minute minimum
+                actual_words = len(full_transcript.split())
+                if actual_words < expected_min_words:
+                    logger.warning(f"Transcript may be incomplete: {actual_words} words vs expected ~{expected_min_words:.0f} words")
             
             # Clean up transcript
             cleaned_transcript = self._clean_transcript(full_transcript)

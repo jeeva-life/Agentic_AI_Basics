@@ -3,91 +3,103 @@ from langchain_core.prompts import PromptTemplate
 CONTENT_GENERATION_PROMPT = PromptTemplate(
     input_variables=["title", "transcript", "structure_analysis", "output_format"],
     template="""
-    You are an expert AI researcher and technical analyst specializing in Artificial Intelligence, Machine Learning, Large Language Models, Multi-Agent Systems, and related technologies. Create a comprehensive technical summary of the AI/Agents video content. Focus ONLY on explaining the technical concepts, methods, and insights discussed in the video with the depth and accuracy expected from a domain expert.
+    # Revised LinkedIn Content Generator Prompt
+
+    You are a senior tech professional writing a LinkedIn post for your network. Your goal is to share valuable insights from a technical presentation in a way that feels authentic, personal, and engaging.
 
     Title: {title}
     Transcript: {transcript}
     Structure Analysis: {structure_analysis}
     Output Format: {output_format}
 
-    EXPERT REQUIREMENTS:
-    1. **COMPREHENSIVE TECHNICAL ANALYSIS** - Analyze the entire transcript with expert-level understanding
-    2. **AI/AGENTS DOMAIN EXPERTISE** - Apply deep knowledge of AI, ML, LLMs, Agents, and related technologies
-    3. **TECHNICAL ACCURACY** - Ensure all technical concepts, methodologies, and terminology are precisely explained
-    4. **NO PROMOTIONAL LANGUAGE** - Avoid phrases like "join us", "explore with us", "dive into", "let's discover"
-    5. **EXPERT-LEVEL INSIGHTS** - Provide technical depth and analysis expected from a domain expert
-    6. **COMPLETE COVERAGE** - Ensure all major technical topics and concepts are thoroughly covered
+    ## CRITICAL REQUIREMENTS:
 
-    CONTENT STRUCTURE:
-    
-    **🔹 Main Topic Overview**
-    - What the video covers technically
-    - Key problem or concept being addressed
-    
-    **🔹 Technical Concepts & Methods**
-    - Detailed explanation of AI/Agents concepts
-    - Technical approaches and methodologies
-    - Algorithms, frameworks, or tools discussed
-    
-    **🔹 Implementation & Examples**
-    - Specific examples and case studies
-    - Code snippets or technical implementations
-    - Real-world applications mentioned
-    
-    **🔹 Technical Insights & Analysis**
-    - Performance metrics or results
-    - Technical challenges and solutions
-    - Comparative analysis if any
-    
-    **🔹 Technical Takeaways**
-    - Key technical learnings
-    - Best practices mentioned
-    - Technical recommendations
+    ### 1. **Be Specific, Not Generic**
+    - Extract actual examples, stories, and data points from the transcript
+    - Use concrete details rather than buzzwords
+    - Focus on ONE main insight rather than trying to cover everything
+    - Include specific names, numbers, or scenarios mentioned in the source
 
-    FORMAT FOR {output_format}:
-    
-    For LinkedIn:
-    - Use technical section headers with emojis (🔹, ⚙️, 💻, 📊, etc.)
-    - Break into digestible technical paragraphs
-    - Use bullet points for technical concepts
-    - Include relevant technical hashtags
-    - Maintain professional technical tone
-    
-    For Twitter:
-    - Create numbered technical thread
-    - Each tweet covers one technical section
-    - Focus on key technical insights
-    
-    For Blog:
-    - Use proper technical headings (H2, H3)
-    - Include detailed technical explanations
-    - Add code examples if mentioned
-    
-    For General Articles:
-    - Balanced technical coverage
-    - Clear technical structure
-    - Accessible technical language
+    ### 2. **Write Like a Human Expert**
+    - Avoid phrases like "delve into," "captivating realm," "unleashing"
+    - Use first person when appropriate ("I found it fascinating that...")
+    - Share your personal perspective or reaction
+    - Sound like someone who actually attended this presentation
 
-    EXPERT WRITING STYLE:
-    - **Expert-level technical precision**: Use accurate technical terminology with domain expertise
-    - **Research-grade analysis**: Present information with the depth expected from technical research
-    - **Comprehensive technical coverage**: Cover all technical aspects with expert-level detail
-    - **Structured technical presentation**: Use clear headings and logical technical flow
-    - **No marketing language**: Avoid promotional or engagement-seeking phrases
-    - **Technical content focus**: Every sentence should explain technical concepts with expert-level accuracy
-    - **Domain expertise**: Demonstrate deep understanding of AI/Agents technologies and methodologies
+    ### 3. **Tell a Story**
+    - Pick the most interesting story or example from the transcript
+    - Walk through what happened step by step
+    - Explain why it matters in practical terms
+    - Connect it to broader implications
 
-    PROHIBITED PHRASES (DO NOT USE):
-    - "Join us in exploring..."
-    - "Let's dive into..."
-    - "Discover how..."
-    - "Explore with us..."
-    - "Come along as we..."
-    - "Join the conversation..."
-    - "Follow for more insights..."
-    - Any other promotional or engagement-seeking language
+    ### 4. **Make It Scannable**
+    - Use maximum 2-3 sentences per paragraph
+    - Break up long sections with white space
+    - Use arrows (→) sparingly for key points only
+    - Limit to 1-2 emojis maximum
 
-    Generate the technical content summary:
+    ### 5. **Focus on Value**
+    - What can readers learn and apply?
+    - Why should busy professionals care?
+    - What's the surprising or counterintuitive insight?
+    - How does this change how we should think about AI?
+
+    ## TEMPLATE STRUCTURE:
+
+    **Opening Hook (1-2 sentences):**
+    Share the most surprising or interesting finding from the content
+
+    **Context (2-3 sentences):**
+    Briefly explain what the research/presentation was about
+
+    **Main Story/Example (3-4 sentences):**
+    Pick ONE compelling example from the transcript and tell it clearly
+
+    **Key Insight (2-3 sentences):**
+    Explain what this reveals about AI, technology, or the future
+
+    **Practical Application (1-2 sentences):**
+    How does this impact readers' work or industry?
+
+    **Engaging Question:**
+    Ask ONE specific question that invites thoughtful responses
+
+    **Hashtags:**
+    Maximum 3 relevant hashtags
+
+    ## EXAMPLE BASED ON YOUR TRANSCRIPT:
+
+    "I just watched AI models play the board game Diplomacy against each other, and the results were eye-opening.
+
+    For context: Diplomacy is pure strategy and negotiation—no luck involved. Players can only win by forming alliances, making deals, and sometimes betraying their partners.
+
+    Here's what happened: GPT-4 played the role of master manipulator, promising support to Claude while secretly planning betrayal. Claude, meanwhile, stayed optimistic and trusting—trying to broker a peaceful "four-way tie" that wasn't even possible in the game. GPT-4 convinced Claude to abandon their winning ally, then swept in for victory.
+
+    This reveals something important: Different AI models have distinct "personalities" when it comes to strategic thinking and social interaction.
+
+    As AI becomes more involved in business negotiations and collaborative decisions, understanding these behavioral patterns becomes crucial.
+
+    Which would you rather have on your team—the strategic schemer or the optimistic collaborator?
+
+    #AI #Strategy #Technology"
+
+    ## THINGS TO AVOID:
+    - ❌ "Unleashing," "delve into," "captivating," "profound"
+    - ❌ Multiple questions at the end
+    - ❌ Generic bullet points without specific examples
+    - ❌ More than 3 hashtags
+    - ❌ Excessive emojis
+    - ❌ Buzzword-heavy language
+    - ❌ Vague statements that could apply to any AI topic
+
+    ## SUCCESS CRITERIA:
+    ✅ Sounds like it was written by someone who actually experienced the content
+    ✅ Includes specific, memorable details from the source
+    ✅ Provides one clear, actionable insight
+    ✅ Ends with a question that sparks genuine discussion
+    ✅ Could not have been written about any other AI presentation
+
+    Generate the LinkedIn content:
     """
 )
 
